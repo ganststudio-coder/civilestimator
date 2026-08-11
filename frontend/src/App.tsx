@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import AdditionalCategories from './AdditionalCategories';
 
 const API_BASE = 'http://localhost:3000';
 
@@ -79,6 +80,7 @@ export default function App() {
           </div>
         ))}
       </div>
+      <AdditionalCategories />
     </div>
   );
 }

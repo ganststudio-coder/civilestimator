@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import type { WorkItem } from './types';
 import ItemPicker from './ItemPicker';
+import './styles.css';
 
 const API_BASE = 'http://localhost:3000';
 
@@ -55,16 +56,21 @@ export default function AdditionalCategories({ library, onAddRow }: AdditionalCa
   };
 
   return (
-    <div style={{ marginTop: '40px', borderTop: '2px solid #eee', paddingTop: '20px' }}>
-      <h2>Langkah 2: Kategori Pekerjaan Tambahan</h2>
+    <section className="step">
+      <h2 className="step-title">Fase 2: Kategori Pekerjaan Tambahan</h2>
       {categories.map((c) => (
-        <div key={c.id} style={{ border: '1px solid #ddd', padding: '10px', marginBottom: '10px', borderRadius: '5px' }}>
-          <input value={c.nama} onChange={(e) => updateCategory(c.id, { nama: e.target.value })} />
-          <input type="checkbox" checked={c.ada_pekerjaan} onChange={(e) => updateCategory(c.id, { ada_pekerjaan: e.target.checked })} /> Ada pekerjaan
-          <button onClick={() => deleteCategory(c.id)}>Hapus</button>
+        <div key={c.id} className="cat-card">
+          <div className="cat-header">
+            <input className="cat-name" value={c.nama} onChange={(e) => updateCategory(c.id, { nama: e.target.value })} />
+            <label className="cat-check">
+              <input type="checkbox" checked={c.ada_pekerjaan} onChange={(e) => updateCategory(c.id, { ada_pekerjaan: e.target.checked })} /> Ada pekerjaan
+            </label>
+            <button className="btn btn-ghost btn-sm" onClick={() => deleteCategory(c.id)}>Hapus</button>
+          </div>
           {c.ada_pekerjaan && (
-            <div style={{ marginTop: '5px' }}>
+            <div className="cat-body">
               <input
+                className="file-input"
                 type="file"
                 onChange={async (e) => {
                   const file = e.target.files?.[0];
@@ -80,13 +86,13 @@ export default function AdditionalCategories({ library, onAddRow }: AdditionalCa
                   }
                 }}
               />
-              <button disabled={!c.image_path} onClick={() => readDims(c.id, c.image_path!)}>
+              <button className="btn btn-primary btn-sm" disabled={!c.image_path} onClick={() => readDims(c.id, c.image_path!)}>
                 Baca ukuran dari gambar
               </button>
-              <p>P: {c.dims.panjang}, L: {c.dims.lebar}, T: {c.dims.tinggi}</p>
+              <p className="cat-dims">P: {c.dims.panjang}, L: {c.dims.lebar}, T: {c.dims.tinggi}</p>
 
-              <div style={{ position: 'relative', display: 'inline-block', marginTop: '5px' }}>
-                <button onClick={() => setPickerFor(pickerFor === c.id ? null : c.id)}>
+              <div className="picker-anchor">
+                <button className="btn btn-accent btn-sm" onClick={() => setPickerFor(pickerFor === c.id ? null : c.id)}>
                   + Tambah pekerjaan {c.nama.toLowerCase()}
                 </button>
                 {pickerFor === c.id && (
@@ -105,7 +111,7 @@ export default function AdditionalCategories({ library, onAddRow }: AdditionalCa
           )}
         </div>
       ))}
-      <button onClick={addCategory}>+ Tambah Kategori</button>
-    </div>
+      <button className="btn btn-ghost" onClick={addCategory}>+ Tambah Kategori</button>
+    </section>
   );
 }

@@ -5,6 +5,7 @@ import BoqTable from './BoqTable';
 import ItemPicker from './ItemPicker';
 import type { BoqLine, RowDims, WorkItem } from './types';
 import { computeVolume, unitHargaSatuan } from './rab';
+import './styles.css';
 
 const API_BASE = 'http://localhost:3000';
 
@@ -187,78 +188,113 @@ export default function App() {
     setSuggestions((arr) => arr.map((x) => (x.id === id ? { ...x, dismissed: true } : x)));
 
   return (
-    <div style={{ padding: '20px', textAlign: 'left' }}>
-      <h1>CivilEstimator</h1>
-
-      <section>
-        <h2>Langkah 1: Denah Existing vs Rencana</h2>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <div>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Gambar Denah Existing (kondisi saat ini)</label>
-            <input type="file" onChange={(e) => handleUpload(e, setExistingImg)} />
-          </div>
-          <div>
-            <label style={{ display: 'block', marginBottom: '5px' }}>Gambar Denah Rencana (kondisi yang diinginkan)</label>
-            <input type="file" onChange={(e) => handleUpload(e, setPlanImg)} />
+    <div className="app">
+      <header className="app-header">
+        <div className="app-header-inner">
+          <div className="app-brand">
+            <div className="app-brand-icon">
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M2 18a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1v-2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1z" />
+                <path d="M10 10V5a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v5" />
+                <path d="M4 15v-3a6 6 0 0 1 6-6" />
+                <path d="M14 6a6 6 0 0 1 6 6v3" />
+              </svg>
+            </div>
+            <div>
+              <p className="app-eyebrow">Analisa Gambar → RAB</p>
+              <h1 className="app-title">CivilEstimator</h1>
+            </div>
           </div>
         </div>
-        <button onClick={analyze} disabled={analyzing || !existingImg || !planImg}>
-          {analyzing ? 'Menganalisa...' : 'Analisa Perbandingan'}
-        </button>
+      </header>
 
-        <div style={{ marginTop: '20px' }}>
-          {suggestions
-            .filter((s) => !s.dismissed)
-            .map((s) => (
-              <div key={s.id} style={{ border: '1px solid #ccc', padding: '10px', marginBottom: '10px', borderRadius: '8px', position: 'relative' }}>
-                <strong>{s.kategori}</strong>
-                <p>{s.uraian}</p>
-                <p style={{ fontSize: '0.9em', color: '#666' }}>{s.catatan}</p>
-                <p style={{ fontSize: '0.9em' }}>
-                  {[s.panjang && `P: ${s.panjang}m`, s.lebar && `L: ${s.lebar}m`, s.tinggi && `T: ${s.tinggi}m`]
-                    .filter(Boolean)
-                    .join(', ')}
-                </p>
-                <div style={{ position: 'relative', display: 'inline-block' }}>
-                  <button onClick={() => setPickerForSuggestion(pickerForSuggestion === s.id ? null : s.id)}>
-                    Tambahkan
-                  </button>
-                  {pickerForSuggestion === s.id && (
-                    <ItemPicker
-                      library={library}
-                      defaultCategory={s.kategori}
-                      onClose={() => setPickerForSuggestion(null)}
-                      onPick={(wid) => {
-                        addRow(wid, s.uraian, { p: s.panjang, l: s.lebar, t: s.tinggi });
-                        setPickerForSuggestion(null);
-                        dismissSuggestion(s.id);
-                      }}
-                    />
-                  )}
+      <main className="app-main">
+        <section className="step">
+          <h2 className="step-title">Fase 1: Denah Existing vs Rencana</h2>
+          <div className="upload-row">
+            <div className="upload-field">
+              <label className="upload-label">Gambar Denah Existing (kondisi saat ini)</label>
+              <input className="file-input" type="file" onChange={(e) => handleUpload(e, setExistingImg)} />
+            </div>
+            <div className="upload-field">
+              <label className="upload-label">Gambar Denah Rencana (kondisi yang diinginkan)</label>
+              <input className="file-input" type="file" onChange={(e) => handleUpload(e, setPlanImg)} />
+            </div>
+          </div>
+          <button className="btn btn-primary no-print" onClick={analyze} disabled={analyzing || !existingImg || !planImg}>
+            {analyzing ? 'Menganalisa...' : 'Analisa Perbandingan'}
+          </button>
+
+          <div className="suggestion-list">
+            {suggestions
+              .filter((s) => !s.dismissed)
+              .map((s) => (
+                <div key={s.id} className="suggestion">
+                  <div className="suggestion-body">
+                    <span className="suggestion-cat">{s.kategori}</span>
+                    <p className="suggestion-text">{s.uraian}</p>
+                    <p className="suggestion-note">{s.catatan}</p>
+                    <p className="suggestion-dims">
+                      {[s.panjang && `P: ${s.panjang}m`, s.lebar && `L: ${s.lebar}m`, s.tinggi && `T: ${s.tinggi}m`]
+                        .filter(Boolean)
+                        .join(', ')}
+                    </p>
+                  </div>
+                  <div className="suggestion-actions">
+                    <div className="picker-anchor">
+                      <button className="btn btn-primary btn-sm" onClick={() => setPickerForSuggestion(pickerForSuggestion === s.id ? null : s.id)}>
+                        Tambahkan
+                      </button>
+                      {pickerForSuggestion === s.id && (
+                        <ItemPicker
+                          library={library}
+                          defaultCategory={s.kategori}
+                          onClose={() => setPickerForSuggestion(null)}
+                          onPick={(wid) => {
+                            addRow(wid, s.uraian, { p: s.panjang, l: s.lebar, t: s.tinggi });
+                            setPickerForSuggestion(null);
+                            dismissSuggestion(s.id);
+                          }}
+                        />
+                      )}
+                    </div>
+                    <button className="btn btn-ghost btn-sm" onClick={() => dismissSuggestion(s.id)}>
+                      Skip
+                    </button>
+                  </div>
                 </div>
-                <button onClick={() => dismissSuggestion(s.id)} style={{ marginLeft: '8px' }}>
-                  Skip
-                </button>
-              </div>
-            ))}
-        </div>
-      </section>
+              ))}
+          </div>
+        </section>
 
-      <AdditionalCategories
-        library={library}
-        onAddRow={(workItemId, label, dims) => addRow(workItemId, label, dims)}
-      />
+        <AdditionalCategories
+          library={library}
+          onAddRow={(workItemId, label, dims) => addRow(workItemId, label, dims)}
+        />
 
-      <BoqTable
-        library={library}
-        rows={rows}
-        onAddRow={(wid) => addRow(wid, null, null)}
-        onUpdateDim={updateDim}
-        onUpdateOverrideHarga={updateOverrideHarga}
-        onUpdateOverrideKoef={updateOverrideKoef}
-        onRemoveRow={removeRow}
-        onToggleOpen={toggleOpen}
-      />
+        <BoqTable
+          library={library}
+          rows={rows}
+          onAddRow={(wid) => addRow(wid, null, null)}
+          onUpdateDim={updateDim}
+          onUpdateOverrideHarga={updateOverrideHarga}
+          onUpdateOverrideKoef={updateOverrideKoef}
+          onRemoveRow={removeRow}
+          onToggleOpen={toggleOpen}
+        />
+
+        <footer className="app-footer">© 2026 Ganst-Zakia</footer>
+      </main>
     </div>
   );
 }

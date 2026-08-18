@@ -64,3 +64,5 @@ CREATE TABLE additional_categories (
   ada_pekerjaan BOOLEAN,
   dims_json JSONB
 );
+
+ALTER TABLE boq_lines ADD COLUMN IF NOT EXISTS overrides_koef_json JSONB DEFAULT '{}';

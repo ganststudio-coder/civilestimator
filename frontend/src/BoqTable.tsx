@@ -59,6 +59,29 @@ export default function BoqTable({
         Isi dimensi tiap pekerjaan. Koefisien &amp; harga satuan bisa diedit langsung (tidak mengubah default di library).
       </p>
 
+      <div className="info-box">
+        <svg
+          className="info-box-icon"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
+        <p>
+          Analisis Harga Satuan Pekerjaan (AHSP) adalah cara menghitung biaya tenaga kerja, bahan, dan
+          alat untuk mendapatkan harga satu jenis pekerjaan konstruksi.
+        </p>
+      </div>
+
       {computed.length === 0 && (
         <div className="boq-empty">
           Belum ada pekerjaan. Tambahkan dari saran AI, kategori tambahan, atau manual di bawah.

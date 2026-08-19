@@ -330,6 +330,29 @@
   margin: 0;
 }
 
+/* ---- Info box ---- */
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: rgba(30, 51, 80, 0.05);
+  border: 1px solid rgba(30, 51, 80, 0.15);
+  border-radius: 4px;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: rgba(30, 51, 80, 0.8);
+}
+
+.info-box-icon {
+  flex-shrink: 0;
+  color: var(--rust);
+  margin-top: 2px;
+}
+
+.info-box p {
+  margin: 0;
+}
+
 /* ---- BOQ table ---- */
 .boq {
   display: flex;
